@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from "vue";
 import { invoke } from "@tauri-apps/api/core";
+import { stat } from '@tauri-apps/plugin-fs'
+
 
 const greetMsg = ref("");
 const name = ref("");
@@ -8,6 +10,19 @@ const name = ref("");
 async function greet() {
   // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
   greetMsg.value = await invoke("greet", { name: name.value });
+
+  invoke("my_custom_command", { invoke_message: 'Hello!'}).then((message) => {
+    console.log("response: " + message);
+  });
+
+  await stat('C:\\opt\\upFiles\\temp\\IMG_1507_1733279200197.jpeg').then((resp) => {
+    console.log(resp);
+  });
+
+  // invoke("read_file").then((response) => {
+  //   console.log(response);
+  // });
+
 }
 </script>
 

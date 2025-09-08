@@ -8,6 +8,11 @@
   "permissions": [
     "core:default",
     "opener:default",
-    "serialplugin:default"
+    "serialplugin:default",
+    "fs:default",
+    {
+      "identifier": "fs:read-all",
+       "allow": [{ "path": "C:\\opt\\upFiles\\temp" }]
+    }
   ]
 }
