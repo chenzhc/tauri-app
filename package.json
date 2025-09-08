@@ -12,10 +12,17 @@
   "dependencies": {
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
+    "axios": "^1.11.0",
+    "clipboard": "^2.0.11",
     "d3": "^7.9.0",
     "echarts": "^6.0.0",
     "element-plus": "^2.11.2",
+    "js-beautify": "1.14.11",
+    "js-cookie": "3.0.5",
+    "jsencrypt": "3.3.2",
+    "nprogress": "0.2.0",
     "pinia": "^3.0.3",
+    "tauri-plugin-serialplugin-api": "^2.19.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.1"
   },
@@ -25,5 +32,6 @@
     "sass": "^1.92.1",
     "sass-loader": "^16.0.5",
     "vite": "7.1.4"
-  }
+  },
+  "packageManager": "pnpm@10.15.1+sha512.34e538c329b5553014ca8e8f4535997f96180a1d0f614339357449935350d924e22f8614682191264ec33d1462ac21561aff97f6bb18065351c162c7e8f6de67"
 }
