@@ -12,7 +12,10 @@
     "fs:default",
     {
       "identifier": "fs:read-all",
-       "allow": [{ "path": "C:\\opt\\upFiles\\temp" }]
+       "allow": [
+        { "path": "C:\\opt\\upFiles\\temp" },
+        { "path": "/data2/rust_src"}
+      ]
     }
   ]
 }
