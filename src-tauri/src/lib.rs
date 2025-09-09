@@ -50,7 +50,8 @@ pub fn run() {
                 mycustomcmd::my_custom_command2,
                 mycustomcmd::hello,
                 mycustomcmd::get_app_data,
-                mycustomcmd::get_app_state
+                mycustomcmd::get_app_state,
+                mycustomcmd::increase_counter
             ]
         )
         .run(tauri::generate_context!())

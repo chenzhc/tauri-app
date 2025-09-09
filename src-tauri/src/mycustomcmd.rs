@@ -4,7 +4,7 @@
 
 use std::{io::Error, sync::Mutex};
 use log::info;
-use tauri::{ipc::Response, path::{BaseDirectory, PathResolver}, webview, Manager};
+use tauri::{ipc::Response, path::{BaseDirectory, PathResolver}, webview, Manager, State};
 
 pub struct Database;
 
@@ -41,6 +41,14 @@ pub fn get_app_state(app: tauri::AppHandle) -> u32 {
     state.counter += 1;
 
     return state.counter;
+}
+
+#[tauri::command]
+pub async fn increase_counter(state: State<'_, Mutex<AppState>>) -> Result<u32, ()> {
+    let mut state = state.lock().unwrap();
+    state.counter += 1;
+    
+    Ok(state.counter)
 }
 
 #[tauri::command]
