@@ -11,13 +11,48 @@
     "serialplugin:default",
     "fs:allow-read-text-file",
     "fs:allow-resource-read-recursive",
+    "dialog:allow-ask",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "sql:allow-load",
+    "sql:default",
+    "sql:allow-execute",
+    "store:allow-get",
+    "store:allow-set",
+    "store:allow-save",
+    "store:allow-load",
+    "store:default",
     "fs:default",
     {
       "identifier": "fs:read-all",
-       "allow": [
-        { "path": "C:\\opt\\upFiles\\temp" },
-        { "path": "/data2/rust_src"}
+      "allow": [
+        {
+          "path": "C:\\opt\\upFiles\\temp"
+        },
+        {
+          "path": "/data2/rust_src"
+        }
       ]
-    }
+    },
+    "log:default",
+    "os:default",
+    "process:default",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        {
+          "name": "echo",
+          "cmd": "echo",
+          "args": [
+            {
+              "validator": "^[\\s\\S]*$"
+            }
+          ],
+          "sidecar": false
+        }
+      ]
+    },
+    "upload:default",
+    "websocket:default"
   ]
 }

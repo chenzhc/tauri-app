@@ -2,10 +2,18 @@
 import { ref } from "vue";
 import { invoke } from "@tauri-apps/api/core";
 import { stat } from '@tauri-apps/plugin-fs'
-
+import { emit } from '@tauri-apps/api/event';
+import { resolveResource } from '@tauri-apps/api/path';
+import { readTextFile } from '@tauri-apps/plugin-fs';
+import { ask,open,save } from '@tauri-apps/plugin-dialog';
+import Database from '@tauri-apps/plugin-sql';
+import { Store,load } from '@tauri-apps/plugin-store';
 
 const greetMsg = ref("");
 const name = ref("");
+let store = undefined;
+
+
 
 async function greet() {
   // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -15,14 +23,115 @@ async function greet() {
     console.log("response: " + message);
   });
 
-  await stat('C:\\opt\\upFiles\\temp\\IMG_1507_1733279200197.jpeg').then((resp) => {
-    console.log(resp);
-  });
+  // await stat('C:\\opt\\upFiles\\temp\\IMG_1507_1733279200197.jpeg').then((resp) => {
+  //   console.log(resp);
+  // });
 
   // invoke("read_file").then((response) => {
   //   console.log(response);
   // });
 
+  invoke("login", { user: "tauri", password: "oj4rijw8="}) 
+    .then((message) => {
+      console.log(message);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+  invoke('my_webview_label');
+  
+  invoke("my_custom_command2", { number: 42 })
+    .then((res) => {
+      console.log(`Message: ${res.message}, Other Value: ${res.other_val}`)
+    })
+    .catch((e) => console.error(e));
+  
+  emit('ready', '/path/to/file');
+  invoke("hello").then((res) => {
+    console.log(res);
+  })
+  .catch((e) => console.log(e));
+
+  const resourcePath = await resolveResource('lang/de.json');
+  const langDe = JSON.parse(await readTextFile(resourcePath));
+  console.log(langDe.hello); // 这里将在 devtools 的控制台中输出 'Guten Tag!'
+
+  invoke('get_app_data').then((res) => {
+    console.log(res);
+  });
+
+  invoke("get_app_state").then((res) => {
+    console.log(res);
+  });
+
+  invoke("increase_counter").then((res) => {
+    console.log(res);
+  })
+}
+
+async function openDialog() {
+  // // Create a Yes/No dialog
+  // const answer = await ask('This action cannot be reverted. Are you sure?', {
+  //   title: 'Tauri',
+  //   kind: 'warning',
+  // });
+
+  // console.log(answer);
+
+  // Open a dialog
+  // const file = await open({
+  //   multiple: false,
+  //   directory: false,
+  // });
+  // console.log(file);
+  // Prompt to save a 'My Filter' with extension .png or .jpeg
+  // const path = await save({
+  //   filters: [
+  //     {
+  //       name: 'My Filter',
+  //       extensions: ['png', 'jpeg'],
+  //     },
+  //   ],
+  // });
+  // console.log(path);
+
+  // 
+  queryDb().then((resp) => {
+    console.log(resp);
+  });
+
+
+  store = await load('settings.json', {});
+
+  // 设置一个值。
+  await store.set('some-key', { value: 5 });
+
+  // 获取一个值。
+  const val = await store.get('some-key');
+  console.log(val); // { value: 5 }
+
+  // 您可以在进行更改后手动保存存储
+  // 否则如上所述，它将在正常退出时保存。
+  await store.save();
+
+}
+
+// 初始化数据库
+async function initDb() {
+  const db = await Database.load('mysql://root:123456@192.168.31.105/navi_cloud_sinognss?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8');
+
+  return db;
+}
+
+// 查询数据
+async function queryDb() {
+  const db = await initDb();
+  return await db.select("select * from data_gnss_202509");
+}
+
+async function openMqtt() {
+  invoke("connect_mqtt");
 }
 </script>
 
@@ -51,8 +160,9 @@ async function greet() {
           placeholder="Enter a name..." />
         <el-button type="primary" size="small" @click="greet">Greet</el-button>
       </el-space>
-      
     </form>
+    <el-button type="primary" size="small" style="width:200px;" @click="openDialog">Dialog</el-button><br/><br/>
+    <el-button type="primary" size="small" style="width:200px;" @click="openMqtt">OpenMqtt</el-button>
     <p>{{ greetMsg }}</p>
   </main>
 </template>
